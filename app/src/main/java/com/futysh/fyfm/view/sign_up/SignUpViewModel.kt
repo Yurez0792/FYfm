@@ -60,8 +60,8 @@ class SignUpViewModel(
         mShowProgressLiveData.postValue(null)
         if (
             !isBitmapNull(bitmap)
-            && isEmail(email)
             && isUserNameComply(userName)
+            && isEmail(email)
             && isPasswordComply(password)
             && isPasswordsMatch(password, confirmPassword)
         ) {
