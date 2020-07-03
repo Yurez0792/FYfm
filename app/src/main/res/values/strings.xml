@@ -1,28 +1,3 @@
 <resources>
     <string name="app_name">FYfm</string>
-    <string name="error_image_text">error image</string>
-    <string name="dismiss_image_text">dismiss image</string>
-    <string name="sign_up_text">Sign Up</string>
-    <string name="sign_in_text">Sign In</string>
-    <string name="user_name_text">User name</string>
-    <string name="password_text">Password</string>
-    <string name="email_text">Email</string>
-    <string name="wrong_email_text">Wrong email address</string>
-    <string name="sign_up_error_occurred_text">Error during sign up occurred</string>
-    <string name="email_registered_text">This email has already registered</string>
-    <string name="username_registered_text">This username has already registered</string>
-    <string name="user_registered_text">User with this email has already registered</string>
-    <string name="something_went_wrong_text">Something went wrong</string>
-    <string name="database_error_text">Something went wrong during fetching data from database</string>
-    <string name="user_name_error_text">Username has to has at least 2 characters</string>
-    <string name="password_error_text">Password has to has at least 8 characters</string>
-    <string name="passwords_do_not_match_error_text">Passwords do not match</string>
-    <string name="log_in_error_text">Invalid email or password</string>
-    <string name="choose_avatar_text">Please choose your avatar for Sign Up</string>
-    <string name="user_name_registered_error_text">Sorry but this username has already registered</string>
-    <string name="confirm_password_text">Confirm password</string>
-    <string name="have_account_text">Already have an account?</string>
-    <string name="need_account_text">Need an account?</string>
-    <string name="logo_text">logo</string>
-    <string name="error_text">Error</string>
 </resources>
