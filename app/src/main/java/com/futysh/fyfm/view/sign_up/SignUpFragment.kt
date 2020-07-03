@@ -27,6 +27,11 @@ class SignUpFragment : Fragment() {
 
     companion object {
         private const val IMAGE_CATALOG = "image/*"
+        private const val EMAIL = "email"
+        private const val USER_NAME = "user name"
+        private const val PASSWORD = "password"
+        private const val CONFIRM_PASSWORD = "confirm password"
+        private const val AVATAR = "avatar"
         private const val IMAGES_REQUEST_CODE = 101
     }
 
@@ -34,17 +39,17 @@ class SignUpFragment : Fragment() {
     private var mBitmap: Bitmap? = null
     private lateinit var mBinding: SignUpFragmentLayoutBinding
     private lateinit var mEmailErrorText: TextView
-    private lateinit var mEmailInputLayout: TextInputLayout
-    private lateinit var mEmailEdit: TextInputEditText
     private lateinit var mUserNameErrorText: TextView
     private lateinit var mConfirmPasswordErrorText: TextView
     private lateinit var mPasswordErrorText: TextView
     private lateinit var mUserNameInputLayout: TextInputLayout
     private lateinit var mConfirmPasswordInputLayout: TextInputLayout
+    private lateinit var mPasswordInputLayout: TextInputLayout
+    private lateinit var mEmailInputLayout: TextInputLayout
     private lateinit var mUserNameEdit: TextInputEditText
     private lateinit var mConfirmPasswordEdit: TextInputEditText
     private lateinit var mPasswordEdit: TextInputEditText
-    private lateinit var mPasswordInputLayout: TextInputLayout
+    private lateinit var mEmailEdit: TextInputEditText
     private lateinit var mPhotoImageView: ImageView
 
     override fun onCreateView(
@@ -76,6 +81,55 @@ class SignUpFragment : Fragment() {
 
         initListeners()
         subscribeToLiveData()
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        if (savedInstanceState != null) {
+            mEmailEdit.setText(savedInstanceState.getString(EMAIL))
+            mPasswordEdit.setText(savedInstanceState.getString(PASSWORD))
+            mConfirmPasswordEdit.setText(savedInstanceState.getString(CONFIRM_PASSWORD))
+            mBitmap = savedInstanceState.getParcelable(AVATAR)
+            mPhotoImageView.background =
+                resources.getDrawable(R.drawable.ic_photo_holder_background_transparent, null)
+            mPhotoImageView.setImageBitmap(mBitmap)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == IMAGES_REQUEST_CODE && resultCode == RESULT_OK) {
+            val chosenImageUri = data?.data
+            if (resultCode == RESULT_OK && chosenImageUri != null) {
+
+                if (android.os.Build.VERSION.SDK_INT >= 29) {
+                    mBitmap = ImageDecoder.decodeBitmap(
+                        ImageDecoder.createSource(
+                            context?.contentResolver!!,
+                            chosenImageUri
+                        )
+                    )
+                } else {
+                    mBitmap =
+                        MediaStore.Images.Media.getBitmap(context?.contentResolver, chosenImageUri)
+                }
+
+                mPhotoImageView.background =
+                    resources.getDrawable(R.drawable.ic_photo_holder_background_transparent, null)
+                mPhotoImageView.setImageBitmap(mBitmap)
+            }
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        outState.putString(EMAIL, mEmailEdit.text.toString())
+        outState.putString(USER_NAME, mUserNameEdit.text.toString())
+        outState.putString(PASSWORD, mPasswordEdit.text.toString())
+        outState.putString(CONFIRM_PASSWORD, mConfirmPasswordEdit.text.toString())
+        outState.putParcelable(AVATAR, mBitmap)
     }
 
     private fun subscribeToLiveData() {
@@ -231,30 +285,5 @@ class SignUpFragment : Fragment() {
                 )
             }
         })
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == IMAGES_REQUEST_CODE && resultCode == RESULT_OK) {
-            val chosenImageUri = data?.data
-            if (resultCode == RESULT_OK && chosenImageUri != null) {
-
-                if (android.os.Build.VERSION.SDK_INT >= 29) {
-                    mBitmap = ImageDecoder.decodeBitmap(
-                        ImageDecoder.createSource(
-                            context?.contentResolver!!,
-                            chosenImageUri
-                        )
-                    )
-                } else {
-                    mBitmap =
-                        MediaStore.Images.Media.getBitmap(context?.contentResolver, chosenImageUri)
-                }
-
-                mPhotoImageView.background =
-                    resources.getDrawable(R.drawable.ic_photo_holder_background_transparent, null)
-                mPhotoImageView.setImageBitmap(mBitmap)
-            }
-        }
     }
 }
