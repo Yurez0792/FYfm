@@ -21,8 +21,8 @@ class SignUpViewModel(
 ) : ViewModel() {
 
     companion object {
-        private const val USERNAME_LENGTH_STANDARD = 1
-        private const val PASSWORD_LENGTH_STANDARD = 7
+        const val USERNAME_LENGTH_STANDARD = 1
+        const val PASSWORD_LENGTH_STANDARD = 7
     }
 
     val mWrongEmailLiveData: SingleLiveEvent<String> by lazy {

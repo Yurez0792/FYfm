@@ -14,6 +14,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.NavHostFragment
 import com.futysh.fyfm.MainActivity
 import com.futysh.fyfm.R
 import com.futysh.fyfm.databinding.SignUpFragmentLayoutBinding
@@ -26,10 +27,10 @@ import org.koin.android.ext.android.inject
 class SignUpFragment : Fragment() {
 
     companion object {
+        const val EMAIL = "email"
+        const val PASSWORD = "password"
         private const val IMAGE_CATALOG = "image/*"
-        private const val EMAIL = "email"
         private const val USER_NAME = "user name"
-        private const val PASSWORD = "password"
         private const val CONFIRM_PASSWORD = "confirm password"
         private const val AVATAR = "avatar"
         private const val IMAGES_REQUEST_CODE = 101
@@ -200,7 +201,8 @@ class SignUpFragment : Fragment() {
         })
 
         mViewModel.mUserRegisteredLiveData.observe(this, Observer {
-//            todo: navigate to main
+            NavHostFragment.findNavController(this)
+                .navigate(R.id.action_signUpFragment_to_homeFragment)
             Toast.makeText(context, "User registered", Toast.LENGTH_LONG).show()
         })
 
@@ -228,6 +230,11 @@ class SignUpFragment : Fragment() {
                 mConfirmPasswordEdit.text.toString(),
                 mBitmap
             )
+        }
+
+        mBinding.signInButton.setOnClickListener {
+            NavHostFragment.findNavController(this)
+                .navigate(R.id.action_signUpFragment_to_signInFragment)
         }
 
         mEmailEdit.addTextChangedListener(object : CustomTextWatcher() {
