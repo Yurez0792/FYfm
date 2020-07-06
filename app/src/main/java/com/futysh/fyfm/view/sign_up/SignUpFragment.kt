@@ -11,13 +11,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.NavHostFragment
 import com.futysh.fyfm.MainActivity
 import com.futysh.fyfm.R
 import com.futysh.fyfm.databinding.SignUpFragmentLayoutBinding
+import com.futysh.fyfm.utils.Constants.Companion.EMAIL
+import com.futysh.fyfm.utils.Constants.Companion.PASSWORD
+import com.futysh.fyfm.utils.Constants.Companion.USER_NAME
 import com.futysh.fyfm.view.CustomTextWatcher
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -27,17 +29,14 @@ import org.koin.android.ext.android.inject
 class SignUpFragment : Fragment() {
 
     companion object {
-        const val EMAIL = "email"
-        const val PASSWORD = "password"
         private const val IMAGE_CATALOG = "image/*"
-        private const val USER_NAME = "user name"
         private const val CONFIRM_PASSWORD = "confirm password"
         private const val AVATAR = "avatar"
         private const val IMAGES_REQUEST_CODE = 101
     }
 
     private val mViewModel by inject<SignUpViewModel>()
-    private var mBitmap: Bitmap? = null
+    private var mAvatar: Bitmap? = null
     private lateinit var mBinding: SignUpFragmentLayoutBinding
     private lateinit var mEmailErrorText: TextView
     private lateinit var mUserNameErrorText: TextView
@@ -91,10 +90,10 @@ class SignUpFragment : Fragment() {
             mEmailEdit.setText(savedInstanceState.getString(EMAIL))
             mPasswordEdit.setText(savedInstanceState.getString(PASSWORD))
             mConfirmPasswordEdit.setText(savedInstanceState.getString(CONFIRM_PASSWORD))
-            mBitmap = savedInstanceState.getParcelable(AVATAR)
+            mAvatar = savedInstanceState.getParcelable(AVATAR)
             mPhotoImageView.background =
                 resources.getDrawable(R.drawable.ic_photo_holder_background_transparent, null)
-            mPhotoImageView.setImageBitmap(mBitmap)
+            mPhotoImageView.setImageBitmap(mAvatar)
         }
     }
 
@@ -105,20 +104,20 @@ class SignUpFragment : Fragment() {
             if (resultCode == RESULT_OK && chosenImageUri != null) {
 
                 if (android.os.Build.VERSION.SDK_INT >= 29) {
-                    mBitmap = ImageDecoder.decodeBitmap(
+                    mAvatar = ImageDecoder.decodeBitmap(
                         ImageDecoder.createSource(
                             context?.contentResolver!!,
                             chosenImageUri
                         )
                     )
                 } else {
-                    mBitmap =
+                    mAvatar =
                         MediaStore.Images.Media.getBitmap(context?.contentResolver, chosenImageUri)
                 }
 
                 mPhotoImageView.background =
                     resources.getDrawable(R.drawable.ic_photo_holder_background_transparent, null)
-                mPhotoImageView.setImageBitmap(mBitmap)
+                mPhotoImageView.setImageBitmap(mAvatar)
             }
         }
     }
@@ -130,7 +129,7 @@ class SignUpFragment : Fragment() {
         outState.putString(USER_NAME, mUserNameEdit.text.toString())
         outState.putString(PASSWORD, mPasswordEdit.text.toString())
         outState.putString(CONFIRM_PASSWORD, mConfirmPasswordEdit.text.toString())
-        outState.putParcelable(AVATAR, mBitmap)
+        outState.putParcelable(AVATAR, mAvatar)
     }
 
     private fun subscribeToLiveData() {
@@ -203,7 +202,6 @@ class SignUpFragment : Fragment() {
         mViewModel.mUserRegisteredLiveData.observe(this, Observer {
             NavHostFragment.findNavController(this)
                 .navigate(R.id.action_signUpFragment_to_homeFragment)
-            Toast.makeText(context, "User registered", Toast.LENGTH_LONG).show()
         })
 
         mViewModel.mShowProgressLiveData.observe(this, Observer {
@@ -228,7 +226,7 @@ class SignUpFragment : Fragment() {
                 mUserNameEdit.text.toString(),
                 mPasswordEdit.text.toString(),
                 mConfirmPasswordEdit.text.toString(),
-                mBitmap
+                mAvatar
             )
         }
 

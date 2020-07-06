@@ -1,6 +1,7 @@
 package com.futysh.fyfm
 
 import android.graphics.Color
+import android.graphics.Point
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -43,5 +44,12 @@ class MainActivity : AppCompatActivity() {
             mAlertDialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             mAlertDialog?.show()
         }
+    }
+
+    fun getScreenWidth(): Int {
+        val size = Point()
+        windowManager.defaultDisplay.getSize(size)
+
+        return size.x
     }
 }

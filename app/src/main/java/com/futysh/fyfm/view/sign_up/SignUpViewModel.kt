@@ -5,9 +5,10 @@ import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.futysh.fyfm.R
+import com.futysh.fyfm.model.room.User
 import com.futysh.fyfm.repository.internal_storage.InternalStorageRepository
-import com.futysh.fyfm.repository.room.FmDatabaseImp
-import com.futysh.fyfm.repository.room.model.User
+import com.futysh.fyfm.repository.preferences.PreferenceRepository
+import com.futysh.fyfm.repository.room.FmDatabase
 import com.futysh.fyfm.utils.SingleLiveEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -16,8 +17,9 @@ import timber.log.Timber
 
 class SignUpViewModel(
     private val resources: Resources,
-    private val fmDatabase: FmDatabaseImp,
-    private val internalStorageRepository: InternalStorageRepository
+    private val fmDatabase: FmDatabase,
+    private val internalStorageRepository: InternalStorageRepository,
+    private val preferences: PreferenceRepository
 ) : ViewModel() {
 
     companion object {
@@ -46,8 +48,8 @@ class SignUpViewModel(
     val mGeneralErrorMessageLiveData: SingleLiveEvent<String> by lazy {
         SingleLiveEvent<String>()
     }
-    val mUserRegisteredLiveData: SingleLiveEvent<Boolean> by lazy {
-        SingleLiveEvent<Boolean>()
+    val mUserRegisteredLiveData: SingleLiveEvent<Unit> by lazy {
+        SingleLiveEvent<Unit>()
     }
 
     fun signUpUser(
@@ -71,12 +73,16 @@ class SignUpViewModel(
 
     private fun isBitmapNull(bitmap: Bitmap?): Boolean {
         return if (bitmap == null) {
-            mGeneralErrorMessageLiveData.postValue(resources.getString(R.string.choose_avatar_text))
+            postError(resources.getString(R.string.choose_avatar_text))
             mHideProgressLiveData.postValue(null)
             true
         } else {
             false
         }
+    }
+
+    private fun postError(errorMessage: String) {
+        mGeneralErrorMessageLiveData.postValue(resources.getString(R.string.choose_avatar_text))
     }
 
     private fun checkIfUserAuthorized(
@@ -102,7 +108,7 @@ class SignUpViewModel(
                     }
                 } catch (e: Exception) {
                     Timber.e(e)
-                    mGeneralErrorMessageLiveData.postValue(resources.getString(R.string.database_error_text))
+                    postError(resources.getString(R.string.database_fetch_error_text))
                     mHideProgressLiveData.postValue(null)
                 }
             }
@@ -154,10 +160,10 @@ class SignUpViewModel(
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 try {
-                    val rowId = fmDatabase.getFmDatabase().userDao().insertUser(
+                    val rowId = fmDatabase.getFmDatabase().userDao().saveUser(
                         User(
                             id = null,
-                            name = userName,
+                            userName = userName,
                             email = email,
                             password = password,
                             avatarPath = avatarPath,
@@ -166,9 +172,10 @@ class SignUpViewModel(
                     )
 
                     if (rowId < 0) {
-                        mGeneralErrorMessageLiveData.postValue(resources.getString(R.string.sign_up_error_occurred_text))
+                        postError(resources.getString(R.string.sign_up_error_occurred_text))
                     } else {
-                        mUserRegisteredLiveData.postValue(true)
+                        preferences.setUserName(userName)
+                        mUserRegisteredLiveData.postValue(null)
                         mHideProgressLiveData.postValue(null)
                     }
                 } catch (e: Exception) {

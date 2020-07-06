@@ -5,15 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.NavHostFragment
 import com.futysh.fyfm.MainActivity
 import com.futysh.fyfm.R
 import com.futysh.fyfm.databinding.SignInFragmentLayoutBinding
+import com.futysh.fyfm.utils.Constants.Companion.EMAIL
+import com.futysh.fyfm.utils.Constants.Companion.PASSWORD
 import com.futysh.fyfm.view.CustomTextWatcher
-import com.futysh.fyfm.view.sign_up.SignUpFragment
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import org.koin.android.ext.android.inject
@@ -57,16 +57,16 @@ class SignInFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         if (savedInstanceState != null) {
-            mEmailEdit.setText(savedInstanceState.getString(SignUpFragment.EMAIL))
-            mPasswordEdit.setText(savedInstanceState.getString(SignUpFragment.PASSWORD))
+            mEmailEdit.setText(savedInstanceState.getString(EMAIL))
+            mPasswordEdit.setText(savedInstanceState.getString(PASSWORD))
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        outState.putString(SignUpFragment.EMAIL, mEmailEdit.text.toString())
-        outState.putString(SignUpFragment.PASSWORD, mPasswordEdit.text.toString())
+        outState.putString(EMAIL, mEmailEdit.text.toString())
+        outState.putString(PASSWORD, mPasswordEdit.text.toString())
     }
 
     private fun subscribeToLiveData() {
@@ -82,7 +82,7 @@ class SignInFragment : Fragment() {
             }
         })
 
-        mViewModel.mGeneralErrorMessageLiveData.observe(this, Observer {
+        mViewModel.mDatabaseErrorMessageLiveData.observe(this, Observer {
             it?.let {
                 (activity as MainActivity).showErrorNotification(it)
             }
@@ -91,7 +91,6 @@ class SignInFragment : Fragment() {
         mViewModel.mLogInSuccessLiveData.observe(this, Observer {
             NavHostFragment.findNavController(this)
                 .navigate(R.id.action_signInFragment_to_homeFragment)
-            Toast.makeText(context, "User Log in Success", Toast.LENGTH_LONG).show()
         })
 
         mViewModel.mLogInFailLiveData.observe(this, Observer {

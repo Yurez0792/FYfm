@@ -1,0 +1,9 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/profile_icon_item"
+        android:icon="@drawable/ic_logo"
+        android:title="@string/profile_icon_text"
+        app:actionLayout="@layout/profile_menu_layout"
+        app:showAsAction="ifRoom" />
+</menu>
