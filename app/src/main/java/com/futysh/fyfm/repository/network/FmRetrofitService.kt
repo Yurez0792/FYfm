@@ -9,7 +9,6 @@ class FmRetrofitService {
     companion object {
         private const val FM_BASE_URL = "http://ws.audioscrobbler.com/"
         const val FM_TOP_ALBUMS_METHOD = "tag.gettopalbums"
-        const val FM_TOP_ARTIST_ALBUMS_METHOD = "artist.gettopalbums"
         const val FM_TOP_ARTISTS_TAG = "disco"
         const val FM_API_KEY = "16d906c812cd03992b1eae2656d8d69a"
         const val FM_FORMAT = "json"

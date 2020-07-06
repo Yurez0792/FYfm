@@ -60,7 +60,7 @@ class HomeViewModel(
     }
 
     fun getUserFromDB() {
-        showProgress()
+        mShowProgressLiveData.postValue(true)
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 try {
@@ -71,24 +71,16 @@ class HomeViewModel(
                     fetchContent(user)
                 } catch (e: Exception) {
                     Timber.e(e)
-                    hideProgress()
+                    mHideProgressLiveData.postValue(true)
                 }
             }
         }
     }
 
     fun logOut() {
-        showProgress()
+        mShowProgressLiveData.postValue(true)
         preferences.setUserName("")
         mIsLoggedOut.call()
-        hideProgress()
-    }
-
-    private fun showProgress() {
-        mShowProgressLiveData.postValue(true)
-    }
-
-    private fun hideProgress() {
         mHideProgressLiveData.postValue(true)
     }
 
@@ -137,16 +129,16 @@ class HomeViewModel(
                     )?.albums?.album
 
                     if (favourites.isNotEmpty()) {
-                        mFavouritesAlbumsLiveData.postValue(favourites.reversed())
+                        mFavouritesAlbumsLiveData.postValue(favourites)
                     }
                     albums.let {
                         mAlbumsLiveData.postValue(it)
                     }
-                    hideProgress()
+                    mHideProgressLiveData.postValue(true)
                 } catch (e: Exception) {
                     Timber.e(e)
                     mGeneralErrorMessageLiveData.postValue(resources.getString(R.string.data_fetching_error_text))
-                    hideProgress()
+                    mHideProgressLiveData.postValue(true)
                 }
             }
         }

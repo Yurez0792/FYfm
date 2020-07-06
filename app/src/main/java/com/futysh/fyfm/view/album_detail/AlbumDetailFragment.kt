@@ -9,15 +9,10 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.NavHostFragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.futysh.fyfm.MainActivity
 import com.futysh.fyfm.R
 import com.futysh.fyfm.databinding.AlbumDetailFragmentLayoutBinding
 import com.futysh.fyfm.model.room.BaseAlbum
-import com.futysh.fyfm.repository.network.FmRetrofitService.Companion.FM_API_KEY
-import com.futysh.fyfm.repository.network.FmRetrofitService.Companion.FM_FORMAT
-import com.futysh.fyfm.repository.network.FmRetrofitService.Companion.FM_TOP_ARTIST_ALBUMS_METHOD
 import com.futysh.fyfm.utils.Constants.Companion.ROUNDED_CORNERS_RADIUS
 import com.futysh.fyfm.view.home.HomeFragment.Companion.BASE_ALBUM_KEY
 import com.squareup.picasso.Picasso
@@ -59,21 +54,6 @@ class AlbumDetailFragment : Fragment() {
             fillWidgets()
             setHeartImage(mAlbum.isSelected)
         })
-
-        mViewModel.mShowProgressLiveData.observe(this, Observer {
-            mBinder.progressCircular.visibility = View.VISIBLE
-        })
-
-        mViewModel.mHideProgressLiveData.observe(this, Observer {
-            mBinder.progressCircular.visibility = View.GONE
-        })
-
-        mViewModel.mArtistAlbumLiveData.observe(this, Observer {
-            val trackRecycler: RecyclerView? = mBinder.trackRecycler
-            trackRecycler?.layoutManager =
-                LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-            trackRecycler?.adapter = TracksAdapter(it)
-        })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -86,7 +66,6 @@ class AlbumDetailFragment : Fragment() {
         initListeners()
 
         mViewModel.getFavouriteFromDB(mAlbum)
-        mViewModel.getTopTracks(FM_TOP_ARTIST_ALBUMS_METHOD, FM_API_KEY, FM_FORMAT, mAlbum)
     }
 
     private fun fillWidgets() {

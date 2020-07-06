@@ -32,9 +32,4 @@
     <dimen name="album_rate_padding_bottom">5dp</dimen>
     <dimen name="share_image_margin_end">40dp</dimen>
     <dimen name="album_title_text_width">180dp</dimen>
-
-    <!--track item layout-->
-    <dimen name="track_image">60dp</dimen>
-    <dimen name="track_title_padding">18dp</dimen>
-    <dimen name="track_title_text_size">18sp</dimen>
 </resources>

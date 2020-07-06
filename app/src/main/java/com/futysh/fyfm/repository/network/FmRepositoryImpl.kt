@@ -1,7 +1,7 @@
 package com.futysh.fyfm.repository.network
 
-import com.futysh.fyfm.model.last_fm.artist_top_albums.ArtistTopAlbums
 import com.futysh.fyfm.model.last_fm.top_albums.TopAlbumsResponse
+import com.futysh.fyfm.model.last_fm.top_tracks.TopTracksResponse
 
 class FmRepositoryImpl(fmRetrofitService: FmRetrofitService) : BaseFmRepository(),
     FmRepository {
@@ -22,12 +22,12 @@ class FmRepositoryImpl(fmRetrofitService: FmRetrofitService) : BaseFmRepository(
         )
     }
 
-    override suspend fun getTopArtistAlbums(
+    override suspend fun getTopTracks(
         method: String,
         artist: String,
         apiKey: String,
         format: String
-    ): ArtistTopAlbums? {
+    ): TopTracksResponse? {
         return safeApiCall(
             call = {
                 fmApi.getTopTracks(method, artist, apiKey, format)
