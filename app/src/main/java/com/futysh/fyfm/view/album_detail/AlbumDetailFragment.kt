@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.futysh.fyfm.MainActivity
 import com.futysh.fyfm.R
 import com.futysh.fyfm.databinding.AlbumDetailFragmentLayoutBinding
@@ -68,10 +69,10 @@ class AlbumDetailFragment : Fragment() {
         })
 
         mViewModel.mArtistAlbumLiveData.observe(this, Observer {
-            val trackRecycler = mBinder.trackRecycler
-            trackRecycler.layoutManager =
+            val trackRecycler: RecyclerView? = mBinder.trackRecycler
+            trackRecycler?.layoutManager =
                 LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-            trackRecycler.adapter = TracksAdapter(it)
+            trackRecycler?.adapter = TracksAdapter(it)
         })
     }
 
