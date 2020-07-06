@@ -23,7 +23,8 @@ data class Album(
     imageUrl = image?.get(LARGE_ALBUM_IMAGE)?.text,
     albumName = name,
     albumMbid = mbid,
-    rank = rankObj?.rank
+    rank = rankObj?.rank,
+    artistUrl = url
 ), Parcelable {
 
     fun fillParent() {
@@ -32,5 +33,6 @@ data class Album(
         imageUrl = image?.get(LARGE_ALBUM_IMAGE)?.text
         albumName = name
         rank = rankObj?.rank
+        artistUrl = url
     }
 }

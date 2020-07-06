@@ -25,6 +25,7 @@
     <string name="email_text">Email</string>
     <string name="rank_text">Rank - %1$s</string>
     <string name="wrong_email_text">Wrong email address</string>
+    <string name="turn_on_internet_connection_text">Internet connection fail. Please turn on Internet connection</string>
     <string name="sign_up_error_occurred_text">Error during sign up occurred</string>
     <string name="data_fetching_error_text">Error during fetching content</string>
     <string name="email_registered_text">This email has already registered</string>

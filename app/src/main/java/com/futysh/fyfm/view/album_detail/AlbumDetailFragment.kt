@@ -9,10 +9,15 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.NavHostFragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.futysh.fyfm.MainActivity
 import com.futysh.fyfm.R
 import com.futysh.fyfm.databinding.AlbumDetailFragmentLayoutBinding
 import com.futysh.fyfm.model.room.BaseAlbum
+import com.futysh.fyfm.repository.network.FmRetrofitService.Companion.FM_API_KEY
+import com.futysh.fyfm.repository.network.FmRetrofitService.Companion.FM_FORMAT
+import com.futysh.fyfm.repository.network.FmRetrofitService.Companion.FM_TOP_ARTIST_ALBUMS_METHOD
 import com.futysh.fyfm.utils.Constants.Companion.ROUNDED_CORNERS_RADIUS
 import com.futysh.fyfm.view.home.HomeFragment.Companion.BASE_ALBUM_KEY
 import com.squareup.picasso.Picasso
@@ -27,6 +32,7 @@ class AlbumDetailFragment : Fragment() {
     private lateinit var mAlbumImage: ImageView
     private lateinit var mAlbumTitleText: TextView
     private lateinit var mBinder: AlbumDetailFragmentLayoutBinding
+    private lateinit var mSwipeRefreshLayout: SwipeRefreshLayout
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,7 +50,7 @@ class AlbumDetailFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         mViewModel.mDatabaseErrorMessageLiveData.observe(this, Observer {
-            (activity as MainActivity).showErrorNotification(it)
+            showError(it)
         })
 
         mViewModel.mFavouriteAlbumLiveData.observe(this, Observer {
@@ -54,6 +60,21 @@ class AlbumDetailFragment : Fragment() {
             fillWidgets()
             setHeartImage(mAlbum.isSelected)
         })
+
+        mViewModel.mShowProgressLiveData.observe(this, Observer {
+            mBinder.progressCircular.visibility = View.VISIBLE
+        })
+
+        mViewModel.mHideProgressLiveData.observe(this, Observer {
+            mBinder.progressCircular.visibility = View.GONE
+        })
+
+        mViewModel.mArtistAlbumLiveData.observe(this, Observer {
+            val trackRecycler = mBinder.trackRecycler
+            trackRecycler.layoutManager =
+                LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            trackRecycler.adapter = ArtistTopAlbumsAdapter(it)
+        })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -62,10 +83,26 @@ class AlbumDetailFragment : Fragment() {
         mAlbumTitleText = mBinder.albumTitleText
         mHeartImage = mBinder.heartImage
         mAlbumImage = mBinder.albumImage
+        mSwipeRefreshLayout = mBinder.swipeRefreshLayout
 
         initListeners()
+        getContent()
+    }
 
-        mViewModel.getFavouriteFromDB(mAlbum)
+    private fun getContent() {
+        if (isInternetAvailable()) {
+            mViewModel.getFavouriteFromDB(mAlbum)
+            mViewModel.getTopTracks(FM_TOP_ARTIST_ALBUMS_METHOD, FM_API_KEY, FM_FORMAT, mAlbum)
+        }
+    }
+
+    private fun isInternetAvailable(): Boolean {
+        return if ((activity as MainActivity).isInternetAvailable()) {
+            true
+        } else {
+            showError(getString(R.string.turn_on_internet_connection_text))
+            false
+        }
     }
 
     private fun fillWidgets() {
@@ -103,6 +140,10 @@ class AlbumDetailFragment : Fragment() {
             processByDatabase(mAlbum)
             setHeartImage(!selected)
         }
+
+        mSwipeRefreshLayout.setOnRefreshListener {
+            getContent()
+        }
     }
 
     private fun processByDatabase(album: BaseAlbum) {
@@ -115,5 +156,9 @@ class AlbumDetailFragment : Fragment() {
             .error(R.drawable.ic_launcher_background)
             .transform(RoundedCornersTransformation(ROUNDED_CORNERS_RADIUS, ROUNDED_CORNERS_RADIUS))
             .into(albumImageView)
+    }
+
+    private fun showError(errorMessage: String) {
+        (activity as MainActivity).showErrorNotification(errorMessage)
     }
 }

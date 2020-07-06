@@ -48,10 +48,30 @@ class HomeFragment : Fragment(), AlbumsAdapterListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val swipeRefreshLayout = mBinding.swipeRefreshLayout
         mToolbar = mBinding.toolbar
+        swipeRefreshLayout.setOnRefreshListener {
+            getUser()
+            swipeRefreshLayout.isRefreshing = false
+        }
 
         subscribeToLiveData()
-        mViewModel.getUserFromDB()
+        getUser()
+    }
+
+    private fun getUser() {
+        if (isInternetAvailable()) {
+            mViewModel.getUserFromDB()
+        }
+    }
+
+    private fun isInternetAvailable(): Boolean {
+        return if ((activity as MainActivity).isInternetAvailable()) {
+            true
+        } else {
+            showError(getString(R.string.turn_on_internet_connection_text))
+            false
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -113,7 +133,7 @@ class HomeFragment : Fragment(), AlbumsAdapterListener {
         })
 
         mViewModel.mGeneralErrorMessageLiveData.observe(this, Observer {
-            (activity as MainActivity).showErrorNotification(it)
+            showError(it)
         })
 
         mViewModel.mAlbumsLiveData.observe(this, Observer {
@@ -135,5 +155,9 @@ class HomeFragment : Fragment(), AlbumsAdapterListener {
                 LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             favouritesRecycler.adapter = FavoriteAlbumsAdapter(it, this)
         })
+    }
+
+    private fun showError(errorMessage: String) {
+        (activity as MainActivity).showErrorNotification(errorMessage)
     }
 }

@@ -15,5 +15,6 @@ open class BaseAlbum(
     @ColumnInfo(name = "album_name") var albumName: String?,
     @ColumnInfo(name = "album_mbid") var albumMbid: String?,
     @ColumnInfo(name = "rate") var rank: Int?,
+    @ColumnInfo(name = "artist_url") var artistUrl: String?,
     @ColumnInfo(name = "is_selected") var isSelected: Boolean = true
 ) : Parcelable
