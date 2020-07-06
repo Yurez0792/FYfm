@@ -87,7 +87,7 @@ class AlbumDetailFragment : Fragment() {
     }
 
     private fun initListeners() {
-        mBinder.topAppBar.setNavigationOnClickListener {
+        mBinder.toolbar.setNavigationOnClickListener {
             NavHostFragment.findNavController(this)
                 .navigate(R.id.action_albumDetailFragment_to_homeFragment)
         }

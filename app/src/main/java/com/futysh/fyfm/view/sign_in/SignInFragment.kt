@@ -51,6 +51,7 @@ class SignInFragment : Fragment() {
 
         initListeners()
         subscribeToLiveData()
+        mViewModel.isUserAuthorized()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -76,6 +77,10 @@ class SignInFragment : Fragment() {
             }
         })
 
+        mViewModel.mUserAuthorized.observe(this, Observer {
+            goToHomeFragment()
+        })
+
         mViewModel.mPasswordErrorLiveData.observe(this, Observer {
             it?.let {
                 showErrorPassword(it)
@@ -89,8 +94,7 @@ class SignInFragment : Fragment() {
         })
 
         mViewModel.mLogInSuccessLiveData.observe(this, Observer {
-            NavHostFragment.findNavController(this)
-                .navigate(R.id.action_signInFragment_to_homeFragment)
+            goToHomeFragment()
         })
 
         mViewModel.mLogInFailLiveData.observe(this, Observer {
@@ -105,6 +109,11 @@ class SignInFragment : Fragment() {
         mViewModel.mHideProgressLiveData.observe(this, Observer {
             mBinding.progressCircular.visibility = View.GONE
         })
+    }
+
+    private fun goToHomeFragment() {
+        NavHostFragment.findNavController(this)
+            .navigate(R.id.action_signInFragment_to_homeFragment)
     }
 
     private fun initListeners() {

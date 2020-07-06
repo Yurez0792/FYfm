@@ -2,6 +2,9 @@ package com.futysh.fyfm.view.home
 
 import android.content.res.Resources
 import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
+import androidx.core.graphics.drawable.RoundedBitmapDrawable
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.futysh.fyfm.R
@@ -37,8 +40,8 @@ class HomeViewModel(
     val mFavouritesAlbumsLiveData: SingleLiveEvent<List<BaseAlbum>> by lazy {
         SingleLiveEvent<List<BaseAlbum>>()
     }
-    val mProfileIconLiveData: SingleLiveEvent<Bitmap> by lazy {
-        SingleLiveEvent<Bitmap>()
+    val mProfileIconLiveData: SingleLiveEvent<Drawable> by lazy {
+        SingleLiveEvent<Drawable>()
     }
     val mUserLiveData: SingleLiveEvent<User> by lazy {
         SingleLiveEvent<User>()
@@ -51,25 +54,6 @@ class HomeViewModel(
     }
     val mGeneralErrorMessageLiveData: SingleLiveEvent<String> by lazy {
         SingleLiveEvent<String>()
-    }
-
-    fun getAvatar(path: String?, userName: String?) {
-        multipleLet(path, userName) {
-            viewModelScope.launch {
-                withContext(Dispatchers.IO) {
-                    try {
-                        mProfileIconLiveData.postValue(
-                            internalStorageRepository.loadImageFromStorage(
-                                path!!,
-                                userName!!
-                            )
-                        )
-                    } catch (e: Exception) {
-                        Timber.e(e)
-                    }
-                }
-            }
-        }
     }
 
     fun getUserFromDB() {
@@ -88,6 +72,39 @@ class HomeViewModel(
                 }
             }
         }
+    }
+
+    fun logOut() {
+        preferences.setUserName("")
+    }
+
+    private fun getAvatar(path: String?, userName: String?) {
+        multipleLet(path, userName) {
+            viewModelScope.launch {
+                withContext(Dispatchers.IO) {
+                    try {
+                        mProfileIconLiveData.postValue(
+                            getCircularDrawable(
+                                internalStorageRepository.loadImageFromStorage(
+                                    path!!,
+                                    userName!!
+                                )
+                            )
+                        )
+                    } catch (e: Exception) {
+                        Timber.e(e)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun getCircularDrawable(bitmap: Bitmap?): Drawable {
+        val drawable: RoundedBitmapDrawable =
+            RoundedBitmapDrawableFactory.create(resources, bitmap)
+        drawable.isCircular = true
+
+        return drawable
     }
 
     private fun fetchContent(mUser: User?) {
@@ -116,48 +133,6 @@ class HomeViewModel(
                     Timber.e(e)
                     mGeneralErrorMessageLiveData.postValue(resources.getString(R.string.data_fetching_error_text))
                     mHideProgressLiveData.postValue(true)
-                }
-            }
-        }
-    }
-
-    fun getFavouritesAlbums(userName: String?) {
-        userName?.let {
-            viewModelScope.launch {
-                withContext(Dispatchers.IO) {
-                    try {
-                        val favourites =
-                            fmDatabase.getFmDatabase().favouritesDao().getFavouriteAlbums(userName)
-                        if (favourites.isNotEmpty()) {
-                            mFavouritesAlbumsLiveData.postValue(favourites.reversed())
-                        }
-                    } catch (e: Exception) {
-                        Timber.e(e)
-                    }
-                }
-            }
-        }
-    }
-
-    fun getTopAlbums(
-        method: String,
-        tag: String,
-        apiKey: String,
-        format: String
-    ) {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                try {
-                    mAlbumsLiveData.postValue(
-                        fmRepository.getTopAlbums(
-                            method,
-                            tag,
-                            apiKey,
-                            format
-                        )?.albums?.album
-                    )
-                } catch (e: Exception) {
-                    Timber.e(e)
                 }
             }
         }

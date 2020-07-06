@@ -12,8 +12,9 @@ import com.futysh.fyfm.R
 import com.futysh.fyfm.databinding.HomeFragmentLayoutBinding
 import com.futysh.fyfm.model.room.BaseAlbum
 import com.futysh.fyfm.model.room.User
-import de.hdodenhof.circleimageview.CircleImageView
+import com.google.android.material.appbar.MaterialToolbar
 import org.koin.android.ext.android.inject
+
 
 class HomeFragment : Fragment(), AlbumsAdapterListener {
 
@@ -23,8 +24,9 @@ class HomeFragment : Fragment(), AlbumsAdapterListener {
 
     private val mViewModel by inject<HomeViewModel>()
     private var mUser: User? = null
-    private lateinit var mProfileIconItem: MenuItem
+    private lateinit var mProfileMenuItem: MenuItem
     private lateinit var mBinding: HomeFragmentLayoutBinding
+    private lateinit var mToolbar: MaterialToolbar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,23 +46,37 @@ class HomeFragment : Fragment(), AlbumsAdapterListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        mToolbar = mBinding.toolbar
+
         subscribeToLiveData()
         mViewModel.getUserFromDB()
-//        mViewModel.getTopAlbums(FM_TOP_ALBUMS_METHOD, FM_TOP_ARTISTS_TAG, FM_API_KEY, FM_FORMAT)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        (activity as MainActivity).setSupportActionBar(mBinding.topAppBar)
+        (activity as MainActivity).setSupportActionBar(mToolbar)
         (activity as MainActivity).window.statusBarColor =
             ContextCompat.getColor(requireContext(), R.color.dark_blue_color)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu, menu)
-        mProfileIconItem = menu.findItem(R.id.profile_icon_item)
+        mProfileMenuItem = menu.findItem(R.id.profile_menu_item)
+
         super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.log_out_item -> {
+                mViewModel.logOut()
+                true
+            }
+            else -> {
+                super.onOptionsItemSelected(item)
+            }
+        }
     }
 
     override fun onAlbumItemClicked(album: BaseAlbum) {
@@ -72,15 +88,12 @@ class HomeFragment : Fragment(), AlbumsAdapterListener {
 
     private fun subscribeToLiveData() {
         mViewModel.mProfileIconLiveData.observe(this, Observer {
-            mProfileIconItem.actionView.findViewById<CircleImageView>(R.id.profile_image_view)
-                .setImageBitmap(it)
+            mProfileMenuItem.icon = it
         })
 
         mViewModel.mUserLiveData.observe(this, Observer {
             it?.let {
                 mUser = it
-//                mViewModel.getAvatar(mUser?.avatarPath, mUser?.userName)
-//                mViewModel.getFavouritesAlbums(mUser?.userName)
             }
         })
 

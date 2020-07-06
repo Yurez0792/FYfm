@@ -19,6 +19,9 @@ class SignInViewModel(
     private val preferences: PreferenceRepository
 ) : ViewModel() {
 
+    val mUserAuthorized: SingleLiveEvent<Boolean> by lazy {
+        SingleLiveEvent<Boolean>()
+    }
     val mWrongEmailLiveData: SingleLiveEvent<String> by lazy {
         SingleLiveEvent<String>()
     }
@@ -67,6 +70,12 @@ class SignInViewModel(
                     }
                 }
             }
+        }
+    }
+
+    fun isUserAuthorized() {
+        if (preferences.getUserName().isNotBlank()) {
+            mUserAuthorized.postValue(true)
         }
     }
 

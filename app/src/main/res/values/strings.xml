@@ -9,6 +9,7 @@
     <string name="your_favourites_text">Your Favourites</string>
     <string name="recommended_playlist_text">Recommended Playlist</string>
     <string name="profile_icon_text">profile icon</string>
+    <string name="log_out_text">Log out</string>
     <string name="user_name_text">User name</string>
     <string name="password_text">Password</string>
     <string name="email_text">Email</string>
