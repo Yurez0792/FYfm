@@ -2,6 +2,7 @@
     <string name="app_name">FY FM</string>
     <string name="error_image_text">error image</string>
     <string name="album_image_text">album image</string>
+    <string name="track_image_text">track image</string>
     <string name="download_text">download</string>
     <string name="share_text">share</string>
     <string name="heart_text">heart</string>
@@ -24,6 +25,7 @@
     <string name="username_registered_text">This username has already registered</string>
     <string name="user_registered_text">User with this email has already registered</string>
     <string name="something_went_wrong_text">Something went wrong</string>
+    <string name="fetching_tracks_error_text">Something went wrong during fetching tracks</string>
     <string name="database_fetch_error_text">Something went wrong during fetching data from database</string>
     <string name="database_save_error_text">Something went wrong during saving data from database</string>
     <string name="user_name_error_text">Username has to has at least 2 characters</string>
