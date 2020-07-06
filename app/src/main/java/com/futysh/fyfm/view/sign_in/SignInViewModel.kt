@@ -4,7 +4,8 @@ import android.content.res.Resources
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.futysh.fyfm.R
-import com.futysh.fyfm.repository.room.FmDatabaseImp
+import com.futysh.fyfm.repository.preferences.PreferenceRepository
+import com.futysh.fyfm.repository.room.FmDatabase
 import com.futysh.fyfm.utils.SingleLiveEvent
 import com.futysh.fyfm.view.sign_up.SignUpViewModel.Companion.PASSWORD_LENGTH_STANDARD
 import kotlinx.coroutines.Dispatchers
@@ -14,9 +15,13 @@ import timber.log.Timber
 
 class SignInViewModel(
     private val resources: Resources,
-    private val fmDatabase: FmDatabaseImp
+    private val fmDatabase: FmDatabase,
+    private val preferences: PreferenceRepository
 ) : ViewModel() {
 
+    val mUserAuthorized: SingleLiveEvent<Boolean> by lazy {
+        SingleLiveEvent<Boolean>()
+    }
     val mWrongEmailLiveData: SingleLiveEvent<String> by lazy {
         SingleLiveEvent<String>()
     }
@@ -29,11 +34,11 @@ class SignInViewModel(
     val mHideProgressLiveData: SingleLiveEvent<Unit> by lazy {
         SingleLiveEvent<Unit>()
     }
-    val mGeneralErrorMessageLiveData: SingleLiveEvent<String> by lazy {
+    val mDatabaseErrorMessageLiveData: SingleLiveEvent<String> by lazy {
         SingleLiveEvent<String>()
     }
-    val mLogInSuccessLiveData: SingleLiveEvent<Boolean> by lazy {
-        SingleLiveEvent<Boolean>()
+    val mLogInSuccessLiveData: SingleLiveEvent<Unit> by lazy {
+        SingleLiveEvent<Unit>()
     }
     val mLogInFailLiveData: SingleLiveEvent<Boolean> by lazy {
         SingleLiveEvent<Boolean>()
@@ -52,18 +57,25 @@ class SignInViewModel(
                         val userByEmail = userDao.getUserByEmail(email)
                         if (userByEmail != null && isPasswordsMatch(password, userByEmail.password)
                         ) {
-                            mLogInSuccessLiveData.postValue(true)
+                            preferences.setUserName(userByEmail.userName)
+                            mLogInSuccessLiveData.postValue(null)
                         } else {
                             mLogInFailLiveData.postValue(true)
                         }
                         mHideProgressLiveData.postValue(null)
                     } catch (e: Exception) {
                         Timber.e(e)
-                        mGeneralErrorMessageLiveData.postValue(resources.getString(R.string.database_error_text))
+                        mDatabaseErrorMessageLiveData.postValue(resources.getString(R.string.database_fetch_error_text))
                         mHideProgressLiveData.postValue(null)
                     }
                 }
             }
+        }
+    }
+
+    fun isUserAuthorized() {
+        if (preferences.getUserName().isNotBlank()) {
+            mUserAuthorized.postValue(true)
         }
     }
 

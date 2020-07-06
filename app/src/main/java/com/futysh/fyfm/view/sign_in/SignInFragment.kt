@@ -5,15 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.NavHostFragment
 import com.futysh.fyfm.MainActivity
 import com.futysh.fyfm.R
 import com.futysh.fyfm.databinding.SignInFragmentLayoutBinding
+import com.futysh.fyfm.utils.Constants.Companion.EMAIL
+import com.futysh.fyfm.utils.Constants.Companion.PASSWORD
 import com.futysh.fyfm.view.CustomTextWatcher
-import com.futysh.fyfm.view.sign_up.SignUpFragment
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import org.koin.android.ext.android.inject
@@ -51,22 +52,25 @@ class SignInFragment : Fragment() {
 
         initListeners()
         subscribeToLiveData()
+        mViewModel.isUserAuthorized()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        (activity as MainActivity).window.statusBarColor =
+            ContextCompat.getColor(requireContext(), R.color.main_background_start)
         if (savedInstanceState != null) {
-            mEmailEdit.setText(savedInstanceState.getString(SignUpFragment.EMAIL))
-            mPasswordEdit.setText(savedInstanceState.getString(SignUpFragment.PASSWORD))
+            mEmailEdit.setText(savedInstanceState.getString(EMAIL))
+            mPasswordEdit.setText(savedInstanceState.getString(PASSWORD))
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        outState.putString(SignUpFragment.EMAIL, mEmailEdit.text.toString())
-        outState.putString(SignUpFragment.PASSWORD, mPasswordEdit.text.toString())
+        outState.putString(EMAIL, mEmailEdit.text.toString())
+        outState.putString(PASSWORD, mPasswordEdit.text.toString())
     }
 
     private fun subscribeToLiveData() {
@@ -76,22 +80,24 @@ class SignInFragment : Fragment() {
             }
         })
 
+        mViewModel.mUserAuthorized.observe(this, Observer {
+            goToHomeFragment()
+        })
+
         mViewModel.mPasswordErrorLiveData.observe(this, Observer {
             it?.let {
                 showErrorPassword(it)
             }
         })
 
-        mViewModel.mGeneralErrorMessageLiveData.observe(this, Observer {
+        mViewModel.mDatabaseErrorMessageLiveData.observe(this, Observer {
             it?.let {
                 (activity as MainActivity).showErrorNotification(it)
             }
         })
 
         mViewModel.mLogInSuccessLiveData.observe(this, Observer {
-            NavHostFragment.findNavController(this)
-                .navigate(R.id.action_signInFragment_to_homeFragment)
-            Toast.makeText(context, "User Log in Success", Toast.LENGTH_LONG).show()
+            goToHomeFragment()
         })
 
         mViewModel.mLogInFailLiveData.observe(this, Observer {
@@ -106,6 +112,11 @@ class SignInFragment : Fragment() {
         mViewModel.mHideProgressLiveData.observe(this, Observer {
             mBinding.progressCircular.visibility = View.GONE
         })
+    }
+
+    private fun goToHomeFragment() {
+        NavHostFragment.findNavController(this)
+            .navigate(R.id.action_signInFragment_to_homeFragment)
     }
 
     private fun initListeners() {

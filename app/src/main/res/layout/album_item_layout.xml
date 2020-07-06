@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/linear_margin"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/album_image"
+        android:layout_width="@dimen/photo_image_size"
+        android:layout_height="@dimen/photo_image_size"
+        android:contentDescription="@string/album_image_text"
+        android:scaleType="centerCrop"
+        android:src="@drawable/telegram" />
+
+    <TextView
+        android:id="@+id/album_title_text"
+        android:layout_width="@dimen/photo_image_size"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat_semi_bold"
+        android:maxLines="3"
+        android:paddingStart="@dimen/album_title_padding"
+        android:paddingTop="@dimen/album_title_padding"
+        android:paddingEnd="@dimen/linear_margin"
+        android:paddingBottom="@dimen/album_title_padding"
+        android:textColor="@android:color/white"
+        tools:text="@string/app_name" />
+</LinearLayout>

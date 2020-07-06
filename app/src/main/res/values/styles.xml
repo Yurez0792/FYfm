@@ -1,7 +1,8 @@
 <resources>
 
     <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:statusBarColor">@color/main_background_start</item>
+        <item name="android:statusBarColor">@color/dark_blue_color</item>
+        <item name="android:windowBackground">@drawable/activity_background</item>
     </style>
 
     <style name="EditTextTheme" parent="Theme.AppCompat.Light.DarkActionBar">

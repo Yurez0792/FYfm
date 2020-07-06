@@ -1,0 +1,18 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/profile_menu_item"
+        android:icon="@drawable/ic_logo"
+        android:title=""
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/log_out_item"
+                android:icon="@drawable/ic_logout"
+                android:orderInCategory="100"
+                android:title="@string/log_out_text"
+                app:showAsAction="ifRoom" />
+        </menu>
+    </item>
+</menu>
