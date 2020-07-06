@@ -1,0 +1,166 @@
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_blue_color">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/dark_blue_color"
+            app:navigationIcon="@drawable/ic_back_arrow" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/dark_blue_color"
+                android:padding="@dimen/linear_margin">
+
+                <ImageView
+                    android:id="@+id/album_image"
+                    android:layout_width="@dimen/logo_size"
+                    android:layout_height="@dimen/logo_size"
+                    android:contentDescription="@string/album_image_text"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:src="@drawable/telegram" />
+
+                <LinearLayout
+                    android:id="@+id/description_layout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintLeft_toRightOf="@+id/album_image"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/album_image">
+
+                    <TextView
+                        android:id="@+id/album_title_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/album_rate_margin"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/montserrat_semi_bold"
+                        android:maxLines="2"
+                        android:padding="@dimen/album_title_padding"
+                        android:paddingStart="@dimen/album_title_start_padding"
+                        android:paddingEnd="@dimen/album_rate_padding_bottom"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/album_title_text_size"
+                        tools:text="@string/app_name" />
+
+                    <TextView
+                        android:id="@+id/album_rate_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/album_rate_margin"
+                        android:fontFamily="@font/montserrat_light"
+                        android:paddingStart="@dimen/album_title_start_padding"
+                        android:paddingTop="@dimen/album_rate_margin"
+                        android:paddingEnd="@dimen/album_title_start_padding"
+                        android:paddingBottom="@dimen/album_rate_padding_bottom"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/description_text_size"
+                        tools:text="@string/app_name" />
+
+                    <TextView
+                        android:id="@+id/music_time_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/album_rate_margin"
+                        android:fontFamily="@font/montserrat_light"
+                        android:paddingStart="@dimen/album_title_start_padding"
+                        android:paddingEnd="@dimen/album_title_start_padding"
+                        android:text="@string/by_music_time_text"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/description_text_size" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/download_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/download_image_margin_end"
+                    android:layout_marginBottom="@dimen/download_image_margin_bottom"
+                    android:contentDescription="@string/download_text"
+                    android:src="@drawable/ic_download"
+                    android:textSize="@dimen/description_text_size"
+                    app:layout_constraintBottom_toTopOf="@id/barrier"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintLeft_toLeftOf="@+id/description_layout"
+                    app:layout_constraintRight_toLeftOf="@+id/heart_image" />
+
+                <ImageView
+                    android:id="@+id/heart_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/download_image_margin_end"
+                    android:layout_marginBottom="@dimen/download_image_margin_bottom"
+                    android:contentDescription="@string/heart_text"
+                    android:src="@drawable/ic_heart"
+                    app:layout_constraintBottom_toTopOf="@id/barrier"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintLeft_toRightOf="@+id/download_image"
+                    app:layout_constraintRight_toLeftOf="@+id/share_image" />
+
+                <ImageView
+                    android:id="@+id/share_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/download_image_margin_bottom"
+                    android:layout_marginBottom="@dimen/download_image_margin_bottom"
+                    android:contentDescription="@string/share_text"
+                    android:src="@drawable/ic_share"
+                    app:layout_constraintBottom_toTopOf="@id/barrier"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintLeft_toRightOf="@+id/heart_image"
+                    app:layout_constraintRight_toRightOf="@+id/description_layout" />
+
+                <androidx.constraintlayout.widget.Barrier
+                    android:id="@+id/barrier"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:barrierDirection="bottom"
+                    app:constraint_referenced_ids="album_image,share_image,heart_image, download_image" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/track_recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:padding="@dimen/album_rate_margin"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/barrier" />
+
+                <ProgressBar
+                    android:id="@+id/progress_circular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
