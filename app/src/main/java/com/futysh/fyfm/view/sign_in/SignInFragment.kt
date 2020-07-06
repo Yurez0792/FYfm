@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.NavHostFragment
@@ -57,6 +58,8 @@ class SignInFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        (activity as MainActivity).window.statusBarColor =
+            ContextCompat.getColor(requireContext(), R.color.main_background_start)
         if (savedInstanceState != null) {
             mEmailEdit.setText(savedInstanceState.getString(EMAIL))
             mPasswordEdit.setText(savedInstanceState.getString(PASSWORD))

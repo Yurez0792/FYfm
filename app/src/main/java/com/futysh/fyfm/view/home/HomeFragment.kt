@@ -5,6 +5,7 @@ import android.view.*
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.futysh.fyfm.MainActivity
@@ -27,6 +28,7 @@ class HomeFragment : Fragment(), AlbumsAdapterListener {
     private lateinit var mProfileMenuItem: MenuItem
     private lateinit var mBinding: HomeFragmentLayoutBinding
     private lateinit var mToolbar: MaterialToolbar
+    private lateinit var mNavHostFragment: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,6 +60,8 @@ class HomeFragment : Fragment(), AlbumsAdapterListener {
         (activity as MainActivity).setSupportActionBar(mToolbar)
         (activity as MainActivity).window.statusBarColor =
             ContextCompat.getColor(requireContext(), R.color.dark_blue_color)
+
+        mNavHostFragment = NavHostFragment.findNavController(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -82,8 +86,7 @@ class HomeFragment : Fragment(), AlbumsAdapterListener {
     override fun onAlbumItemClicked(album: BaseAlbum) {
         val bundle = Bundle()
         bundle.putParcelable(BASE_ALBUM_KEY, album)
-        NavHostFragment.findNavController(this)
-            .navigate(R.id.action_homeFragment_to_albumDetailFragment, bundle)
+        mNavHostFragment.navigate(R.id.action_homeFragment_to_albumDetailFragment, bundle)
     }
 
     private fun subscribeToLiveData() {
@@ -103,6 +106,10 @@ class HomeFragment : Fragment(), AlbumsAdapterListener {
 
         mViewModel.mHideProgressLiveData.observe(this, Observer {
             mBinding.progressCircular.visibility = View.GONE
+        })
+
+        mViewModel.mIsLoggedOut.observe(this, Observer {
+            mNavHostFragment.navigate(R.id.action_homeFragment_to_signInFragment)
         })
 
         mViewModel.mGeneralErrorMessageLiveData.observe(this, Observer {

@@ -55,6 +55,9 @@ class HomeViewModel(
     val mGeneralErrorMessageLiveData: SingleLiveEvent<String> by lazy {
         SingleLiveEvent<String>()
     }
+    val mIsLoggedOut: SingleLiveEvent<Unit> by lazy {
+        SingleLiveEvent<Unit>()
+    }
 
     fun getUserFromDB() {
         mShowProgressLiveData.postValue(true)
@@ -75,7 +78,10 @@ class HomeViewModel(
     }
 
     fun logOut() {
+        mShowProgressLiveData.postValue(true)
         preferences.setUserName("")
+        mIsLoggedOut.call()
+        mHideProgressLiveData.postValue(true)
     }
 
     private fun getAvatar(path: String?, userName: String?) {

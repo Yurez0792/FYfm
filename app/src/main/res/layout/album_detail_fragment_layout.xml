@@ -38,87 +38,93 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:src="@drawable/telegram" />
 
-            <TextView
-                android:id="@+id/album_title_text"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/description_layout"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/album_rate_margin"
-                android:ellipsize="end"
-                android:fontFamily="@font/montserrat_semi_bold"
-                android:maxLines="2"
-                android:padding="@dimen/album_title_padding"
-                android:paddingStart="@dimen/album_title_start_padding"
-                android:paddingEnd="@dimen/album_rate_padding_bottom"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/ok_button_size"
+                android:orientation="vertical"
                 app:layout_constraintLeft_toRightOf="@+id/album_image"
-                app:layout_constraintTop_toTopOf="@+id/album_image"
-                tools:text="@string/app_name" />
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/album_image">
 
-            <TextView
-                android:id="@+id/album_rate_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/album_rate_margin"
-                android:fontFamily="@font/montserrat_light"
-                android:paddingStart="@dimen/album_title_start_padding"
-                android:paddingTop="@dimen/album_rate_margin"
-                android:paddingEnd="@dimen/album_title_start_padding"
-                android:paddingBottom="@dimen/album_rate_padding_bottom"
-                android:textColor="@android:color/white"
-                app:layout_constraintLeft_toRightOf="@+id/album_image"
-                app:layout_constraintTop_toBottomOf="@+id/album_title_text"
-                tools:text="@string/app_name" />
+                <TextView
+                    android:id="@+id/album_title_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/album_rate_margin"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/montserrat_semi_bold"
+                    android:maxLines="2"
+                    android:padding="@dimen/album_title_padding"
+                    android:paddingStart="@dimen/album_title_start_padding"
+                    android:paddingEnd="@dimen/album_rate_padding_bottom"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/ok_button_size"
+                    tools:text="@string/app_name" />
 
-            <TextView
-                android:id="@+id/music_time_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/album_rate_margin"
-                android:fontFamily="@font/montserrat_light"
-                android:paddingStart="@dimen/album_title_start_padding"
-                android:paddingEnd="@dimen/album_title_start_padding"
-                android:text="@string/by_music_time_text"
-                android:textColor="@android:color/white"
-                app:layout_constraintLeft_toRightOf="@+id/album_image"
-                app:layout_constraintTop_toBottomOf="@+id/album_rate_text" />
+                <TextView
+                    android:id="@+id/album_rate_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/album_rate_margin"
+                    android:fontFamily="@font/montserrat_light"
+                    android:paddingStart="@dimen/album_title_start_padding"
+                    android:paddingTop="@dimen/album_rate_margin"
+                    android:paddingEnd="@dimen/album_title_start_padding"
+                    android:paddingBottom="@dimen/album_rate_padding_bottom"
+                    android:textColor="@android:color/white"
+                    tools:text="@string/app_name" />
+
+                <TextView
+                    android:id="@+id/music_time_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/album_rate_margin"
+                    android:fontFamily="@font/montserrat_light"
+                    android:paddingStart="@dimen/album_title_start_padding"
+                    android:paddingEnd="@dimen/album_title_start_padding"
+                    android:text="@string/by_music_time_text"
+                    android:textColor="@android:color/white" />
+            </LinearLayout>
 
             <ImageView
                 android:id="@+id/download_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:contentDescription="@string/album_image_text"
-                android:scaleType="centerCrop"
+                android:layout_marginEnd="@dimen/download_image_margin_end"
+                android:layout_marginBottom="@dimen/download_image_margin_bottom"
+                android:contentDescription="@string/download_text"
                 android:src="@drawable/ic_download"
-                app:layout_constraintBottom_toBottomOf="@id/album_image"
-                app:layout_constraintHorizontal_chainStyle="spread_inside"
-                app:layout_constraintLeft_toLeftOf="@id/music_time_text"
+                app:layout_constraintBottom_toTopOf="@id/barrier"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintLeft_toLeftOf="@+id/description_layout"
                 app:layout_constraintRight_toLeftOf="@+id/heart_image" />
 
             <ImageView
                 android:id="@+id/heart_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:contentDescription="@string/album_image_text"
-                android:scaleType="centerCrop"
+                android:layout_marginEnd="@dimen/download_image_margin_end"
+                android:layout_marginBottom="@dimen/download_image_margin_bottom"
+                android:contentDescription="@string/heart_text"
                 android:src="@drawable/ic_heart"
-                app:layout_constraintBottom_toBottomOf="@id/album_image"
-                app:layout_constraintHorizontal_chainStyle="spread_inside"
-                app:layout_constraintLeft_toRightOf="@id/download_image"
+                app:layout_constraintBottom_toTopOf="@id/barrier"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintLeft_toRightOf="@+id/download_image"
                 app:layout_constraintRight_toLeftOf="@+id/share_image" />
 
             <ImageView
                 android:id="@+id/share_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/share_image_margin_end"
-                android:contentDescription="@string/album_image_text"
-                android:scaleType="centerCrop"
+                android:layout_marginEnd="@dimen/download_image_margin_bottom"
+                android:layout_marginBottom="@dimen/download_image_margin_bottom"
+                android:contentDescription="@string/share_text"
                 android:src="@drawable/ic_share"
-                app:layout_constraintBottom_toBottomOf="@id/album_image"
-                app:layout_constraintHorizontal_chainStyle="spread_inside"
-                app:layout_constraintLeft_toRightOf="@id/heart_image"
-                app:layout_constraintRight_toRightOf="parent" />
+                app:layout_constraintBottom_toTopOf="@id/barrier"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintLeft_toRightOf="@+id/heart_image"
+                app:layout_constraintRight_toRightOf="@+id/description_layout" />
 
             <androidx.constraintlayout.widget.Barrier
                 android:id="@+id/barrier"

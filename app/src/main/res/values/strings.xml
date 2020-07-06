@@ -2,6 +2,9 @@
     <string name="app_name">FY FM</string>
     <string name="error_image_text">error image</string>
     <string name="album_image_text">album image</string>
+    <string name="download_text">download</string>
+    <string name="share_text">share</string>
+    <string name="heart_text">heart</string>
     <string name="dismiss_image_text">dismiss image</string>
     <string name="by_music_time_text">by FY FM</string>
     <string name="sign_up_text">Sign Up</string>

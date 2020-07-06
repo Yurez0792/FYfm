@@ -24,6 +24,7 @@ class AlbumDetailFragment : Fragment() {
     private val mViewModel by inject<AlbumDetailViewModel>()
     private lateinit var mAlbum: BaseAlbum
     private lateinit var mHeartImage: ImageView
+    private lateinit var mAlbumImage: ImageView
     private lateinit var mAlbumTitleText: TextView
     private lateinit var mBinder: AlbumDetailFragmentLayoutBinding
 
@@ -60,6 +61,7 @@ class AlbumDetailFragment : Fragment() {
 
         mAlbumTitleText = mBinder.albumTitleText
         mHeartImage = mBinder.heartImage
+        mAlbumImage = mBinder.albumImage
 
         initListeners()
 
@@ -69,13 +71,16 @@ class AlbumDetailFragment : Fragment() {
     private fun fillWidgets() {
         mBinder.albumTitleText.text = mAlbum.albumName
         mBinder.albumRateText.text = getString(R.string.rank_text, mAlbum.rank?.toString())
-        mAlbum.imageUrl?.let { setAlbumImage(mBinder.albumImage, it) }
+        mAlbum.imageUrl?.let { setAlbumImage(mAlbumImage, it) }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        val albumImageLayoutWidth = ((activity as MainActivity).getScreenWidth() / 2.2).toInt()
+        val albumImageLayoutParams = mAlbumImage.layoutParams
 
-        mAlbumTitleText.width = (activity as MainActivity).getScreenWidth() / 2
+        albumImageLayoutParams.width = albumImageLayoutWidth
+        albumImageLayoutParams.height = albumImageLayoutWidth
     }
 
     private fun setHeartImage(selected: Boolean) {
