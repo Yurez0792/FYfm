@@ -129,7 +129,7 @@ class HomeViewModel(
                     )?.albums?.album
 
                     if (favourites.isNotEmpty()) {
-                        mFavouritesAlbumsLiveData.postValue(favourites)
+                        mFavouritesAlbumsLiveData.postValue(favourites.reversed())
                     }
                     albums.let {
                         mAlbumsLiveData.postValue(it)
