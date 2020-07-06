@@ -4,6 +4,12 @@
     <string name="album_image_text">album image</string>
     <string name="download_text">download</string>
     <string name="share_text">share</string>
+    <string name="home_text">Home</string>
+    <string name="explore_text">Explore</string>
+    <string name="google_text">google</string>
+    <string name="facebook_text">facebook</string>
+    <string name="twitter_text">twitter</string>
+    <string name="library_text">Library</string>
     <string name="heart_text">heart</string>
     <string name="dismiss_image_text">dismiss image</string>
     <string name="by_music_time_text">by FY FM</string>

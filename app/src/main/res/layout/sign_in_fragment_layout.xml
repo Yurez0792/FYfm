@@ -132,6 +132,39 @@
             android:textSize="@dimen/sign_up_button_text_size"
             app:layout_constraintTop_toBottomOf="@+id/password_error_text" />
 
+        <ImageView
+            android:id="@+id/facebook_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/facebook_text"
+            android:padding="@dimen/text_input_layout_padding"
+            android:src="@drawable/ic_facebook"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/google_plus_image"
+            app:layout_constraintTop_toBottomOf="@+id/sign_in_button" />
+
+        <ImageView
+            android:id="@+id/google_plus_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/google_text"
+            android:padding="@dimen/text_input_layout_padding"
+            android:src="@drawable/ic_google"
+            app:layout_constraintLeft_toRightOf="@+id/facebook_image"
+            app:layout_constraintRight_toLeftOf="@+id/twitter_image"
+            app:layout_constraintTop_toBottomOf="@id/sign_in_button" />
+
+        <ImageView
+            android:id="@+id/twitter_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/twitter_text"
+            android:padding="@dimen/text_input_layout_padding"
+            android:src="@drawable/ic_twitter"
+            app:layout_constraintLeft_toRightOf="@id/google_plus_image"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sign_in_button" />
+
         <TextView
             android:id="@+id/need_account_text"
             android:layout_width="wrap_content"
@@ -156,7 +189,7 @@
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintLeft_toRightOf="@+id/need_account_text"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/sign_in_button" />
+            app:layout_constraintTop_toBottomOf="@+id/facebook_image" />
 
         <ProgressBar
             android:id="@+id/progress_circular"
