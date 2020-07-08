@@ -2,6 +2,7 @@ package com.futysh.fyfm.view.home
 
 import android.os.Bundle
 import android.view.*
+import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -26,8 +27,9 @@ class HomeFragment : Fragment(), AlbumsAdapterListener {
     private val mViewModel by inject<HomeViewModel>()
     private var mUser: User? = null
     private lateinit var mProfileMenuItem: MenuItem
-    private lateinit var mBinding: HomeFragmentLayoutBinding
+    private lateinit var mBinder: HomeFragmentLayoutBinding
     private lateinit var mToolbar: MaterialToolbar
+    private lateinit var mUpdateButton: AppCompatButton
     private lateinit var mNavHostFragment: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,19 +42,19 @@ class HomeFragment : Fragment(), AlbumsAdapterListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        mBinding = HomeFragmentLayoutBinding.inflate(inflater)
+        mBinder = HomeFragmentLayoutBinding.inflate(inflater)
 
-        return mBinding.root
+        return mBinder.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val swipeRefreshLayout = mBinding.swipeRefreshLayout
-        mToolbar = mBinding.toolbar
-        swipeRefreshLayout.setOnRefreshListener {
+        mToolbar = mBinder.toolbar
+        mUpdateButton = mBinder.updateButton
+
+        mUpdateButton.setOnClickListener {
             getUser()
-            swipeRefreshLayout.isRefreshing = false
         }
 
         subscribeToLiveData()
@@ -65,11 +67,21 @@ class HomeFragment : Fragment(), AlbumsAdapterListener {
         }
     }
 
+    private fun showUpdateButton() {
+        mUpdateButton.visibility = View.VISIBLE
+    }
+
+    private fun hideUpdateButton() {
+        mUpdateButton.visibility = View.GONE
+    }
+
     private fun isInternetAvailable(): Boolean {
         return if ((activity as MainActivity).isInternetAvailable()) {
+            hideUpdateButton()
             true
         } else {
             showError(getString(R.string.turn_on_internet_connection_text))
+            showUpdateButton()
             false
         }
     }
@@ -121,11 +133,11 @@ class HomeFragment : Fragment(), AlbumsAdapterListener {
         })
 
         mViewModel.mShowProgressLiveData.observe(this, Observer {
-            mBinding.progressCircular.visibility = View.VISIBLE
+            mBinder.progressCircular.visibility = View.VISIBLE
         })
 
         mViewModel.mHideProgressLiveData.observe(this, Observer {
-            mBinding.progressCircular.visibility = View.GONE
+            mBinder.progressCircular.visibility = View.GONE
         })
 
         mViewModel.mIsLoggedOut.observe(this, Observer {
@@ -138,8 +150,8 @@ class HomeFragment : Fragment(), AlbumsAdapterListener {
 
         mViewModel.mAlbumsLiveData.observe(this, Observer {
             it?.let {
-                mBinding.recommendedTitleText.visibility = View.VISIBLE
-                val topAlbumsRecycler = mBinding.topAlbumsRecycler
+                mBinder.recommendedTitleText.visibility = View.VISIBLE
+                val topAlbumsRecycler = mBinder.topAlbumsRecycler
                 topAlbumsRecycler.visibility = View.VISIBLE
                 topAlbumsRecycler.layoutManager =
                     LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
@@ -148,8 +160,8 @@ class HomeFragment : Fragment(), AlbumsAdapterListener {
         })
 
         mViewModel.mFavouritesAlbumsLiveData.observe(this, Observer {
-            mBinding.favouritesTitle.visibility = View.VISIBLE
-            val favouritesRecycler = mBinding.favouritesRecycler
+            mBinder.favouritesTitle.visibility = View.VISIBLE
+            val favouritesRecycler = mBinder.favouritesRecycler
             favouritesRecycler.visibility = View.VISIBLE
             favouritesRecycler.layoutManager =
                 LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)

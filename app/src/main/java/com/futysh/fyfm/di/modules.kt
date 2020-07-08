@@ -29,5 +29,5 @@ val viewModelModule = module {
     viewModel { SignUpViewModel(androidContext().resources, get(), get(), get()) }
     viewModel { SignInViewModel(androidContext().resources, get(), get()) }
     viewModel { HomeViewModel(androidContext().resources, get(), get(), get(), get()) }
-    viewModel { AlbumDetailViewModel(androidContext().resources, get()) }
+    viewModel { AlbumDetailViewModel(androidContext().resources, get(), get()) }
 }
